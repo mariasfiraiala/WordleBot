@@ -4,6 +4,10 @@ First of all, welcome to our Wordle Bot! We are happy that you are interested in
 
 Our project is hosted on GitHub, and we encourage you to follow these guidelines before contributing to our project!
 
+## Fork our project
+
+Ideally, for less merge conflicts and better integration we advise core members and future contributors to **fork** our project and work on their mirror.
+
 ## Work on your own branch, checked out from master
 
 ```console
