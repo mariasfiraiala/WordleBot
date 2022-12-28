@@ -25,7 +25,7 @@ OUTLINE = "#d3d6da"
 FILLED_OUTLINE = "#878a8c"
 
 #TODO: randomize correct word
-CORRECT_WORD = "coder"
+CORRECT_WORD = random.choice(WORDS)
 
 ALPHABET = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"]
 
@@ -72,7 +72,7 @@ class Letter:
         self.bg_y = bg_position[1]
         self.bg_rect = (bg_position[0], self.bg_y, LETTER_SIZE, LETTER_SIZE)
         self.text = text
-        self.text_position = (self.bg_x+36, self.bg_position[1]+34)
+        self.text_position = (self.bg_x + 36, self.bg_position[1] + 34)
         self.text_surface = GUESSED_LETTER_FONT.render(self.text, True, self.text_color)
         self.text_rect = self.text_surface.get_rect(center=self.text_position)
 
@@ -104,13 +104,14 @@ class Indicator:
         # Puts the indicator and its text on the screen at the desired position.
         pygame.draw.rect(SCREEN, self.bg_color, self.rect)
         self.text_surface = AVAILABLE_LETTER_FONT.render(self.text, True, "white")
-        self.text_rect = self.text_surface.get_rect(center=(self.x+27, self.y+30))
+        self.text_rect = self.text_surface.get_rect(center=(self.x + 27, self.y + 30))
         SCREEN.blit(self.text_surface, self.text_rect)
         pygame.display.update()
 
 # Drawing the indicators on the screen.
 
-indicator_x, indicator_y = 20, 600
+indicator_x = 20
+indicator_y = 600
 
 for i in range(3):
     for letter in ALPHABET[i]:
@@ -128,11 +129,14 @@ def check_guess(guess_to_check):
     # Goes through each letter and checks if it should be green, yellow, or grey.
     global current_guess, current_guess_string, guesses_count, current_letter_bg_x, game_result
     game_decided = False
+    # Result based on the color coding G - green, Y - yellow, F - grey (idk why).
+    result = ""
     for i in range(5):
         lowercase_letter = guess_to_check[i].text.lower()
         if lowercase_letter in CORRECT_WORD:
             if lowercase_letter == CORRECT_WORD[i]:
                 guess_to_check[i].bg_color = GREEN
+                result += "G"
                 for indicator in indicators:
                     if indicator.text == lowercase_letter.upper():
                         indicator.bg_color = GREEN
@@ -142,6 +146,7 @@ def check_guess(guess_to_check):
                     game_result = "W"
             else:
                 guess_to_check[i].bg_color = YELLOW
+                result += "Y"
                 for indicator in indicators:
                     if indicator.text == lowercase_letter.upper():
                         indicator.bg_color = YELLOW
@@ -151,6 +156,7 @@ def check_guess(guess_to_check):
                 game_decided = True
         else:
             guess_to_check[i].bg_color = GREY
+            result += "F"
             for indicator in indicators:
                 if indicator.text == lowercase_letter.upper():
                     indicator.bg_color = GREY
@@ -169,14 +175,16 @@ def check_guess(guess_to_check):
     if guesses_count == 6 and game_result == "":
         game_result = "L"
 
+    return result    
+
 def play_again():
     # Puts the play again text on the screen.
     pygame.draw.rect(SCREEN, "white", (10, 600, 1000, 600))
     play_again_font = pygame.font.Font("../assets/FreeSansBold.otf", 40)
     play_again_text = play_again_font.render("Press ENTER to Play Again!", True, "black")
-    play_again_rect = play_again_text.get_rect(center=(WIDTH/2, 700))
+    play_again_rect = play_again_text.get_rect(center=(WIDTH / 2, 700))
     word_was_text = play_again_font.render(f"The word was {CORRECT_WORD}!", True, "black")
-    word_was_rect = word_was_text.get_rect(center=(WIDTH/2, 650))
+    word_was_rect = word_was_text.get_rect(center=(WIDTH / 2, 650))
     SCREEN.blit(word_was_text, word_was_rect)
     SCREEN.blit(play_again_text, play_again_rect)
     pygame.display.update()
@@ -201,13 +209,54 @@ def create_new_letter(key_pressed):
     # Creates a new letter and adds it to the guess.
     global current_guess_string, current_letter_bg_x
     current_guess_string += key_pressed
-    new_letter = Letter(key_pressed, (current_letter_bg_x, guesses_count*100+LETTER_Y_SPACING))
+    new_letter = Letter(key_pressed, (current_letter_bg_x, guesses_count * 100 + LETTER_Y_SPACING))
     current_letter_bg_x += LETTER_X_SPACING
     guesses[guesses_count].append(new_letter)
     current_guess.append(new_letter)
     for guess in guesses:
         for letter in guess:
             letter.draw()
+
+def create_new_word(word):
+    # Creates a new word and adds it to the guess
+    global current_guess_string, current_letter_bg_x
+    current_guess_string = word
+    for i in range(5):
+        create_new_letter(word[i].upper())         
+
+def update_words(words, color_coding):
+    # Updates the word list based on the previous color coding
+    global current_guess_string
+    new_words = []
+    for i in range(len(words)):
+        current_word = words[i]
+        flag = True
+        for j in range(5):
+            lowercase_letter = current_guess_string[j]
+            if color_coding[j] == "G":
+                # Eliminate the words that don't have a matching green letter
+                if current_word[j] != lowercase_letter:
+                    flag = False
+                    break
+            elif color_coding[j] == "Y":
+                # Eliminate the words that don't contain yellow letters
+                flag = False
+                for k in range(5):
+                    if current_word[k] == lowercase_letter and k != j:
+                        flag = True
+                if flag == False:
+                    break        
+            else:
+                # Eliminate the words that contain grey letters
+                for k in range(5):
+                    if current_word[k] == lowercase_letter:
+                        flag = False
+                if flag == False:
+                    break
+        if flag == True:
+            new_words.append(current_word)
+    print(new_words)                         
+    return new_words
 
 def delete_letter():
     # Deletes the last letter from the guess.
