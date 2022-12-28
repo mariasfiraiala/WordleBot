@@ -1,10 +1,14 @@
 """
-    Wordle Bot is a script that provides both automatic and live Wordle gameplays.
+    Wordle Bot is a script that provides automatic Wordle gameplays.
 """
 
 import sys
 import pygame
+import random
 from infrastructure import grid
+from words import *
+
+all_words = WORDS
 
 while True:
     if grid.game_result != "":
@@ -16,15 +20,12 @@ while True:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
                 if grid.game_result != "":
+                    all_words = WORDS
                     grid.reset()
                 else:
-                    if len(grid.current_guess_string) == 5 and grid.current_guess_string.lower() in grid.WORDS:
-                        grid.check_guess(grid.current_guess)
-            elif event.key == pygame.K_BACKSPACE:
-                if len(grid.current_guess_string) > 0:
-                    grid.delete_letter()
-            else:
-                key_pressed = event.unicode.upper()
-                if key_pressed in "QWERTYUIOPASDFGHJKLZXCVBNM" and key_pressed != "":
-                    if len(grid.current_guess_string) < 5:
-                        grid.create_new_letter(key_pressed)
+                    grid.create_new_word(random.choice(all_words))
+                    current_string = grid.current_guess_string
+                    result = grid.check_guess(grid.current_guess)
+                    grid.current_guess_string = current_string
+                    # Using the current guess and result to eliminate the other words
+                    all_words = grid.update_words(all_words, result)
