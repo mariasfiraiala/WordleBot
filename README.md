@@ -39,3 +39,14 @@ Type your word of choice; delete letters from it; make sure it's a viable Englis
 The structure of the project revolves around the entry point of the app, `start_menu.py`.
 From `start_menu.py` the flow divides itself depending on the user's choice: it relies on either `wordle_bot.py` and `wordle_player`.`wordle_player` uses the `grid` module, while the `menu` module was used earlier, by the entry point.
 Finally, the `words.py` file is a long, exhaustive list of all 5 letters words in the English language.
+
+## Team Involvement
+
+Alexandru Mihai: Wordle Bot functionality
+Ioana Tudor: main menu display and buttons functionality
+Maria Sfiraiala: Wordle Single Player functionality and screen display
+Costin Vlad: Messages display and screen display
+
+## Team Dificulties
+
+Getting used to pygame proved challenging considering the vast number of functions and functionalities it provides, however we managed to overcome this issue by thorough documentation and watching pygame tutorials on YouTube :D.
