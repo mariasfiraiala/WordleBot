@@ -10,6 +10,8 @@ from words import *
 
 all_words = WORDS
 
+grid.bot_message()
+
 while True:
     if grid.game_result != "":
         grid.play_again()
@@ -22,6 +24,7 @@ while True:
                 if grid.game_result != "":
                     all_words = WORDS
                     grid.reset()
+                    grid.bot_message()
                 else:
                     grid.create_new_word(random.choice(all_words))
                     current_string = grid.current_guess_string

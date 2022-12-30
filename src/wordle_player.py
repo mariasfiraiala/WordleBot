@@ -6,6 +6,8 @@ import sys
 import pygame
 from infrastructure import grid
 
+grid.player_message()
+
 while True:
     if grid.game_result != "":
         grid.play_again()
@@ -17,9 +19,14 @@ while True:
             if event.key == pygame.K_RETURN:
                 if grid.game_result != "":
                     grid.reset()
+                    grid.player_message()
                 else:
-                    if len(grid.current_guess_string) == 5 and grid.current_guess_string.lower() in grid.WORDS:
-                        result = grid.check_guess(grid.current_guess)
+                    if len(grid.current_guess_string) == 5:
+                        if grid.current_guess_string.lower() in grid.WORDS:
+                            result = grid.check_guess(grid.current_guess)
+                            grid.good_message()
+                        else:
+                            grid.bad_message()
             elif event.key == pygame.K_BACKSPACE:
                 if len(grid.current_guess_string) > 0:
                     grid.delete_letter()

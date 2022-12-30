@@ -2,17 +2,18 @@ import pygame
 import sys
 import random
 from words import *
+from good_messages import *
 
 pygame.init()
 
 # Constants
 
-WIDTH = 633
+WIDTH = 1233
 HEIGHT = 900
 
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 BACKGROUND = pygame.image.load("../assets/StartingTiles.png")
-BACKGROUND_RECT = BACKGROUND.get_rect(center=(317, 300))
+BACKGROUND_RECT = BACKGROUND.get_rect(center=(417, 300))
 ICON = pygame.image.load("../assets/Icon.png")
 
 pygame.display.set_caption("WORDLE")
@@ -109,7 +110,7 @@ class Indicator:
 
 # Drawing the indicators on the screen.
 
-indicator_x = 20
+indicator_x = 120
 indicator_y = 600
 
 for i in range(3):
@@ -120,9 +121,63 @@ for i in range(3):
         indicator_x += 60
     indicator_y += 100
     if i == 0:
-        indicator_x = 50
+        indicator_x = 150
     elif i == 1:
-        indicator_x = 105
+        indicator_x = 205
+
+def player_message():
+    # Standard message, welcomes the player to the game.
+    pygame.draw.rect(SCREEN, "white", (750, 10, WIDTH - 750, HEIGHT - 10))
+    message_font = pygame.font.Font("../assets/FreeSansBold.otf", 40)
+    message1_text = message_font.render("Welcome to", True, "black")
+    message1_rect = message1_text.get_rect(center = (1000, 150))
+    message2_text = message_font.render("Wordle! Try to", True, "black")
+    message2_rect = message2_text.get_rect(center = (1000, 190))
+    message3_text = message_font.render("guess the word.", True, "black")
+    message3_rect = message3_text.get_rect(center = (1000, 230))
+    SCREEN.blit(message1_text, message1_rect)
+    SCREEN.blit(message2_text, message2_rect)
+    SCREEN.blit(message3_text, message3_rect)
+    pygame.display.update()
+
+def bot_message():
+    # Standard message, explains to the player how to interact with the wordle bot.
+    pygame.draw.rect(SCREEN, "white", (750, 10, WIDTH - 750, HEIGHT - 10))
+    message_font = pygame.font.Font("../assets/FreeSansBold.otf", 40)
+    message1_text = message_font.render("Press ENTER to", True, "black")
+    message1_rect = message1_text.get_rect(center = (1000, 150))
+    message2_text = message_font.render("generate a new", True, "black")
+    message2_rect = message2_text.get_rect(center = (1000, 190))
+    message3_text = message_font.render("word.", True, "black")
+    message3_rect = message3_text.get_rect(center = (1000, 230))
+    SCREEN.blit(message1_text, message1_rect)
+    SCREEN.blit(message2_text, message2_rect)
+    SCREEN.blit(message3_text, message3_rect)
+    pygame.display.update()
+
+def good_message():
+    # Displays a message to encourage the player
+    pygame.draw.rect(SCREEN, "white", (750, 10, WIDTH - 750, HEIGHT - 10))
+    message_font = pygame.font.Font("../assets/FreeSansBold.otf", 40)
+    message_text = message_font.render(random.choice(GOOD_MESSAGES), True, "black")
+    message_rect = message_text.get_rect(center = (1000, 150))
+    SCREEN.blit(message_text, message_rect)
+    pygame.display.update()
+
+def bad_message():
+    # Displays a message for when the word does not exist
+    pygame.draw.rect(SCREEN, "white", (750, 10, WIDTH - 750, HEIGHT - 10))
+    message_font = pygame.font.Font("../assets/FreeSansBold.otf", 40)
+    message1_text = message_font.render("I don't know", True, "black")
+    message1_rect = message1_text.get_rect(center = (1000, 150))
+    message2_text = message_font.render("that word, try", True, "black")
+    message2_rect = message2_text.get_rect(center = (1000, 190))
+    message3_text = message_font.render("again!", True, "black")
+    message3_rect = message3_text.get_rect(center = (1000, 230))
+    SCREEN.blit(message1_text, message1_rect)
+    SCREEN.blit(message2_text, message2_rect)
+    SCREEN.blit(message3_text, message3_rect)
+    pygame.display.update()
 
 def check_guess(guess_to_check):
     # Goes through each letter and checks if it should be green, yellow, or grey.
@@ -178,14 +233,17 @@ def check_guess(guess_to_check):
 
 def play_again():
     # Puts the play again text on the screen.
-    pygame.draw.rect(SCREEN, "white", (10, 600, 1000, 600))
-    play_again_font = pygame.font.Font("../assets/FreeSansBold.otf", 40)
-    play_again_text = play_again_font.render("Press ENTER to Play Again!", True, "black")
-    play_again_rect = play_again_text.get_rect(center=(WIDTH / 2, 700))
-    word_was_text = play_again_font.render(f"The word was {CORRECT_WORD}!", True, "black")
-    word_was_rect = word_was_text.get_rect(center=(WIDTH / 2, 650))
-    SCREEN.blit(word_was_text, word_was_rect)
-    SCREEN.blit(play_again_text, play_again_rect)
+    pygame.draw.rect(SCREEN, "white", (750, 10, WIDTH - 750, HEIGHT - 10))
+    message_font = pygame.font.Font("../assets/FreeSansBold.otf", 40)
+    message1_text = message_font.render("The word was", True, "black")
+    message1_rect = message1_text.get_rect(center = (1000, 150))
+    message2_text = message_font.render(f"'{CORRECT_WORD}'! Press ENTER", True, "black")
+    message2_rect = message2_text.get_rect(center = (1000, 190))
+    message3_text = message_font.render("to try again!", True, "black")
+    message3_rect = message3_text.get_rect(center = (1000, 230))
+    SCREEN.blit(message1_text, message1_rect)
+    SCREEN.blit(message2_text, message2_rect)
+    SCREEN.blit(message3_text, message3_rect)
     pygame.display.update()
 
 def reset():
@@ -208,7 +266,7 @@ def create_new_letter(key_pressed):
     # Creates a new letter and adds it to the guess.
     global current_guess_string, current_letter_bg_x
     current_guess_string += key_pressed
-    new_letter = Letter(key_pressed, (current_letter_bg_x, guesses_count * 100 + LETTER_Y_SPACING))
+    new_letter = Letter(key_pressed, (current_letter_bg_x + 100, guesses_count * 100 + LETTER_Y_SPACING))
     current_letter_bg_x += LETTER_X_SPACING
     guesses[guesses_count].append(new_letter)
     current_guess.append(new_letter)
