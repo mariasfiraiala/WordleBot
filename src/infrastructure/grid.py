@@ -15,7 +15,7 @@ BACKGROUND = pygame.image.load("../assets/StartingTiles.png")
 BACKGROUND_RECT = BACKGROUND.get_rect(center=(317, 300))
 ICON = pygame.image.load("../assets/Icon.png")
 
-pygame.display.set_caption("Wordle!")
+pygame.display.set_caption("WORDLE")
 pygame.display.set_icon(ICON)
 
 GREEN = "#6aaa64"
@@ -24,7 +24,6 @@ GREY = "#787c7e"
 OUTLINE = "#d3d6da"
 FILLED_OUTLINE = "#878a8c"
 
-#TODO: randomize correct word
 CORRECT_WORD = random.choice(WORDS)
 
 ALPHABET = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"]
@@ -254,8 +253,7 @@ def update_words(words, color_coding):
                 if flag == False:
                     break
         if flag == True:
-            new_words.append(current_word)
-    print(new_words)                         
+            new_words.append(current_word)                
     return new_words
 
 def delete_letter():
