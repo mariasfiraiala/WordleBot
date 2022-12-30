@@ -2,6 +2,8 @@ import pygame
 import sys
 from infrastructure import menu
 
+menu.title()
+
 while True:
 
     for event in pygame.event.get():

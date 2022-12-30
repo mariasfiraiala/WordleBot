@@ -12,7 +12,7 @@ BUTTON2_NAME = 'PLAY WITH AI'
 WHITE = '#FFFFFF'
 GREEN = '#6AAA64'
 
-SCREEN = pygame.display.set_mode((500, 500))
+SCREEN = pygame.display.set_mode((1233, 900))
 GUI_FONT = pygame.font.Font(None, 30)
 ICON = pygame.image.load("../assets/Icon.png")
 
@@ -74,7 +74,14 @@ class Button:
             self.dynamic_elecation = self.elevation
             self.top_color = GREEN
 
+button1 = Button(BUTTON1_NAME, 220, 40, (506, 405), 5, RUN_PYTHON_PLAYER)
+button2 = Button(BUTTON2_NAME, 220, 40, (506, 505), 5, RUN_PYTHON_BOT)
 
-
-button1 = Button(BUTTON1_NAME, 220, 40, (145, 250), 5, RUN_PYTHON_PLAYER)
-button2 = Button(BUTTON2_NAME, 220, 40, (145, 150), 5, RUN_PYTHON_BOT)
+def title():
+    # Displays title on the starting menu.
+    pygame.draw.rect(SCREEN, "white", (0, 50, 1233, 350))
+    message_font = pygame.font.Font("../assets/FreeSansBold.otf", 80)
+    title_text = message_font.render("WORDLE", True, "black")
+    title_rect = title_text.get_rect(center = (616, 200))
+    SCREEN.blit(title_text, title_rect)
+    pygame.display.update()
